@@ -62,6 +62,7 @@
   # Set correct timezone.
   php_value date.timezone {{ zabbix_timezone }}
 {% endif %}
+{% endif %}
 </VirtualHost>
 
 {# Set up TLS vhosts #}
@@ -146,4 +147,5 @@ SSLCryptoDevice {{ zabbix_apache_SSLCryptoDevice }}
   php_value date.timezone {{ zabbix_timezone }}
 {% endif %}
 </VirtualHost>
+{% endif %}
 {% endif %}
