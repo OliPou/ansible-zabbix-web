@@ -62,17 +62,18 @@
   # Set correct timezone.
   php_value date.timezone {{ zabbix_timezone }}
 {% endif %}
+{% endif %}
 </VirtualHost>
 
 {# Set up TLS vhosts #}
 {% if zabbix_apache_tls and zabbix_apache_vhost_tls_port %}
 
-SSLPassPhraseDialog {{ zabbix_apache_SSLPassPhraseDialog }}
-SSLSessionCache         {{ zabbix_apache_SSLSessionCache }}
-SSLSessionCacheTimeout  {{ zabbix_apache_SSLSessionCacheTimeout }}
-SSLRandomSeed startup file:/dev/urandom  256
-SSLRandomSeed connect builtin
-SSLCryptoDevice {{ zabbix_apache_SSLCryptoDevice }}
+#SSLPassPhraseDialog {{ zabbix_apache_SSLPassPhraseDialog }}
+#SSLSessionCache         {{ zabbix_apache_SSLSessionCache }}
+#SSLSessionCacheTimeout  {{ zabbix_apache_SSLSessionCacheTimeout }}
+#SSLRandomSeed startup file:/dev/urandom  256
+#SSLRandomSeed connect builtin
+#SSLCryptoDevice {{ zabbix_apache_SSLCryptoDevice }}
 
 <VirtualHost _default_:{{ zabbix_apache_vhost_tls_port }}>
   ServerName {{ zabbix_apache_servername }}
@@ -95,7 +96,10 @@ SSLCryptoDevice {{ zabbix_apache_SSLCryptoDevice }}
 {% if zabbix_apache_tls_chain %}
   SSLCertificateChainFile {{ zabbix_apache_tls_chain }}
 {% endif %}
-
+<IfModule mod_headers.c>
+	Header always set Strict-Transport-Security "max-age=31536000; 
+	includeSubDomains; preload"
+</IfModule>
 {% set directory_paths = ['/usr/share/zabbix/conf', '/usr/share/zabbix/app', '/usr/share/zabbix/include', '/usr/share/zabbix/include/classes'] %}
 
   <Directory "/usr/share/zabbix">
@@ -146,4 +150,5 @@ SSLCryptoDevice {{ zabbix_apache_SSLCryptoDevice }}
   php_value date.timezone {{ zabbix_timezone }}
 {% endif %}
 </VirtualHost>
+{% endif %}
 {% endif %}
